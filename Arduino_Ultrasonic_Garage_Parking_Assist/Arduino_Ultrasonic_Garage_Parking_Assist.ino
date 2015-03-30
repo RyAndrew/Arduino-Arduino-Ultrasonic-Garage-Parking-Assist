@@ -45,8 +45,8 @@ char potValueChar[5];
 int minDistanceCm = 10;
 int maxDistanceCm = 100;
 
-int parkDistanceOkThreshold = 5; // 5 cm
-int parkDistanceBlinkThreshold = 20; // 50 cm
+int parkDistanceOkThreshold = 10; // 5 cm
+int parkDistanceBlinkThreshold = 40; // 50 cm
 
 int minCriticalDistanceCm = 1;
 int maxCriticalDistanceCm = 10;
@@ -54,7 +54,7 @@ int maxCriticalDistanceCm = 10;
 int minBlinkRate = 1000;
 int maxBlinkRate = 50;
 
-int distanceMeasurementInterval = 500; // 250 ms = 4 readings per second
+int distanceMeasurementInterval = 250; // 250 ms = 4 readings per second
 
 void setup() {
   
@@ -128,14 +128,16 @@ void loop() {
             setGreenLedBlinkRate(0);
             setRedLedBlinkRate(0);
             
-            analogWrite(ledGreenPin, 255);
             ledGreenState = true;
+            ledRedState = true;
+            analogWrite(ledGreenPin, 255);
+            analogWrite(ledRedPin, 255);
             
           }else{
             distDelta = distDelta - (parkDistanceOkThreshold/2);
             
-        Serial.print("distDelta 2: ");
-        Serial.println(distDelta);
+            Serial.print("distDelta 2: ");
+            Serial.println(distDelta);
         
             float distProportion = distDelta / (float)parkDistanceBlinkThreshold;
             //distProportion -= 1;
@@ -177,8 +179,10 @@ void loop() {
             setGreenLedBlinkRate(0);
             setRedLedBlinkRate(0);
             
-            analogWrite(ledGreenPin, 255);
             ledGreenState = true;
+            ledRedState = true;
+            analogWrite(ledGreenPin, 255);
+            analogWrite(ledRedPin, 255);
         }
         
 
@@ -209,6 +213,10 @@ int maxCriticalDistanceCm = 10;
     }else{ // end if(photoResistorReading > 200){
       ledGreenBlinkRate = 0;
       ledRedBlinkRate = 0;
+      ledGreenState = false;
+      ledRedState = false;
+      analogWrite(ledGreenPin, 0);
+      analogWrite(ledRedPin, 0);
     }
     
     //reset timer
